@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Vendinha"
+                   namespace="Vendinha.Entidades">
+
+	<class name="Divida" table="dividas">
+		<id name="Id" type="int">
+			<generator class="sequence" >
+				<param name="sequence">dividas_seq</param>
+			</generator>
+		</id>
+		<property name="ClienteCodigo"		type="int"					/>
+		<property name="Valor"				type="decimal"				/>
+		<property name="Situacao"			type="bool"					/>
+		<property name="Data"				type="Date"					/>
+		<property name="DataPagamento"		type="Date"					/>
+		<property name="Descricao"			type="string" length="5000"	/>
+
+	</class>
+
+</hibernate-mapping>
