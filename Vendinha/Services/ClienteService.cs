@@ -18,15 +18,51 @@ namespace Vendinha.Services
            new Cliente { Nome = "Zezinho do Pneu", Codigo = 3, DataNascimento = new DateTime(2002,03,03), Email = "pneu_zero@gmail.com", Cpf = "12312312400"}
         };
 
-
-        public static void CriarCliente(Cliente cliente)
+        public static bool Validacao(Cliente cliente, out List<ValidationResult> erros)
         {
-            var erros = new List<ValidationResult>();
+            erros = new List<ValidationResult>();
             var valido = Validator.TryValidateObject(cliente,
                 new ValidationContext(cliente),
                 erros,
                 true
                 );
+
+            return valido;
+        }
+
+        public static List<Cliente> Listar()
+        {
+            return Clientes;
+        }
+
+        public static List<Cliente> Listar(string buscaCliente,
+            int skip = 0,
+            int pageSize = 0)
+        {
+            var pesquisa = Clientes.Where(a =>
+            a.Codigo.ToString() == buscaCliente ||
+            a.Nome.Contains(buscaCliente, StringComparison.OrdinalIgnoreCase) ||
+            a.Email.Contains(buscaCliente) ||
+            a.Cpf.Contains(buscaCliente) 
+            )
+            .OrderBy(x => x.DataNascimento)
+            .AsEnumerable();
+
+            if (skip > 0)
+            {
+                pesquisa = pesquisa.Skip(skip);
+            }
+            if (pageSize > 0)
+            {
+                pesquisa = pesquisa.Take(pageSize);
+            }
+
+            return pesquisa.ToList();
+        }
+
+        public static bool CriarCliente(Cliente cliente, out List<ValidationResult> erros)
+        {
+            var valido = Validacao(cliente, out erros);
 
             if (valido)
             {
@@ -42,29 +78,40 @@ namespace Vendinha.Services
                         );
                 }
             }
+            return false;
         }
-        public static List<Cliente> Listar()
+      
+        public static bool EditarCliente(Cliente atualizarCliente, out List<ValidationResult> erros)
         {
-            return Clientes;
-        }
-        public static List<Cliente> Listar(string buscaCliente)
-        {
-            return Clientes.Where(a => 
-            a.Codigo.ToString() == buscaCliente ||
-            a.Nome.Contains(buscaCliente, StringComparison.OrdinalIgnoreCase) ||
-            a.Email.Contains(buscaCliente) ||
-            a.Cpf.ToString() == buscaCliente
-            )
-            .OrderBy(x => x.DataNascimento)
-            .ToList();
+            var clienteAtual = Clientes.FirstOrDefault(x => x.Codigo == atualizarCliente.Codigo);
+
+            erros = new List<ValidationResult>();
+
+            if (clienteAtual == null)
+            {
+                return false;
+            }
+            else
+            {
+                var valido = Validacao(atualizarCliente, out erros);
+                if (valido)
+                {
+                    clienteAtual.Nome = atualizarCliente.Nome;
+                    clienteAtual.Email = atualizarCliente.Email;
+                    clienteAtual.Cpf = atualizarCliente.Cpf;
+                    clienteAtual.DataNascimento = atualizarCliente.DataNascimento;
+                }
+
+                return valido;
+            }
         }
 
         public static Cliente Remover(int codigo)
         {
             var cliente = Clientes
                 .Where(x => x.Codigo == codigo)
-                .First();
-            Clientes.Remove( cliente );
+                .FirstOrDefault();
+            Clientes.Remove(cliente);
             return cliente;
         }
 

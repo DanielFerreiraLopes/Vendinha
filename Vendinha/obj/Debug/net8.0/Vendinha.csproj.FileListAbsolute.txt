@@ -33,3 +33,4 @@ C:\Users\danie\source\repos\Vendinha\Vendinha\bin\Debug\net8.0\runtimes\win\lib\
 C:\Users\danie\source\repos\Vendinha\Vendinha\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\danie\source\repos\Vendinha\Vendinha\obj\Debug\net8.0\Vendinha.csproj.AssemblyReference.cache
 C:\Users\danie\source\repos\Vendinha\Vendinha\obj\Debug\net8.0\Vendinha.csproj.Up2Date
+C:\Users\danie\source\repos\Vendinha\Vendinha\obj\Debug\net8.0\Vendinha.sourcelink.json
