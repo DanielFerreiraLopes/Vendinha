@@ -7,7 +7,4 @@ using Vendinha.Entidades;
 using Vendinha.Services;
 
 
-foreach (var cliente in ClienteService.Listar())
-{
-    cliente.PrintDados();
-}
+Console.WriteLine("Hello World");

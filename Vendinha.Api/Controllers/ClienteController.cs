@@ -3,23 +3,34 @@ using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 using Vendinha.Entidades;
 using Vendinha.Services;
+using NHibernate;
 
 namespace Vendinha.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class ClienteController : Controller
+    public class ClienteController : ControllerBase
     {
         private readonly ClienteService clienteService;
 
+        public ClienteController(ClienteService clienteService)
+        {
+            this.clienteService = clienteService;
+        }
+
         [HttpGet]
-        public IActionResult Listar(string pesquisa,
-            int skip = 0, 
-            int pageSize = 0) 
+        public IActionResult Listar(string pesquisa) 
         { 
                 var clientes = string.IsNullOrEmpty(pesquisa) ?
-                    ClienteService.Listar() : 
-                    ClienteService.Listar(pesquisa, skip, pageSize);
+                    clienteService.Listar() :
+                    clienteService.Listar(pesquisa);
             return Ok(clientes);
+        }
+
+        [HttpGet("{codigo}")]
+        public IActionResult GetByCodigo(int codigo)
+        {
+            var cliente = clienteService.Retorna(codigo);
+                return Ok(cliente);
         }
 
         [HttpPost]
@@ -29,43 +40,40 @@ namespace Vendinha.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var sucesso = ClienteService.CriarCliente(cliente, out List<ValidationResult> erros);
-            if (sucesso == null)
-            {
-                return Ok(cliente);
-            }
-            else if (erros.Count == 0)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return UnprocessableEntity();
-            }
-        }
-
-        [HttpPost]
-        public IActionResult Editar([FromBody] Cliente cliente)
-        {
-            if (cliente == null)
-            {
-                return BadRequest(ModelState);
-            }
-            var sucesso = ClienteService.EditarCliente(cliente, out List<ValidationResult> erros);
+            var sucesso = clienteService.Criar(cliente, out List<ValidationResult> erros);
             if (sucesso)
             {
                 return Ok(cliente);
             }
             else
             {
-                return UnprocessableEntity();
+                return UnprocessableEntity(erros);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult Editar([FromBody] Cliente cliente)
+        {
+            if (cliente == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var sucesso = clienteService.Editar(cliente, out List<ValidationResult> erros);
+            if (sucesso)
+            {
+                return Ok(cliente);
+            }
+            else
+            {
+                return UnprocessableEntity(erros);
             }
         }
 
         [HttpDelete("{codigo}")]
         public IActionResult Remover(int codigo)
         {
-            var cliente = ClienteService.Remover(codigo);
+            var cliente = clienteService.Excluir(codigo, out _);
             if (cliente == null)
             {
                 return NotFound();

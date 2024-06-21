@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NHibernate;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,91 @@ namespace Vendinha.Services
 {
     public class ClienteService
     {
+        private readonly ISessionFactory session;
+
+        public ClienteService(ISessionFactory session)
+        {
+            this.session = session;
+        }
+
+        public virtual List<Cliente> Listar()
+        {
+            using var sessao = session.OpenSession();
+            var clientes = sessao.Query<Cliente>().OrderByDescending(c => c.Codigo).ToList();
+            return clientes;
+
+        }
+
+        public virtual List<Cliente> Listar(string buscaCliente)
+        {
+            using var sessao = session.OpenSession();
+            var clientes = sessao.Query<Cliente>()
+                .Where(c => c.Codigo.ToString() == buscaCliente ||
+                            c.Nome.Contains(buscaCliente) ||
+                            c.Email.Contains(buscaCliente) ||
+                            c.Cpf.Contains(buscaCliente))
+                    .OrderBy(c => c.Codigo)
+                    .ToList();
+            return clientes;
+
+        }
+
+        public virtual Cliente Retorna(int codigo)
+        {
+            using var sessao = session.OpenSession();
+            var cliente = sessao.Get<Cliente>(codigo);
+            return cliente;
+        }
+
+        public bool Criar(Cliente Cliente, out List<ValidationResult> erros)
+        {
+
+            if (Validacao(Cliente, out erros))
+            {
+                using var sessao = session.OpenSession();
+                using var transaction = sessao.BeginTransaction();
+                sessao.Save(Cliente);
+                transaction.Commit();
+                return true;
+            }
+            return false;
+        }
+
+        public bool Editar(Cliente cliente, out List<ValidationResult> erros)
+        {
+            var validacao = Validacao(cliente, out erros);
+            if (validacao)
+            {
+                using var sessao = session.OpenSession();
+                using var transaction = sessao.BeginTransaction();
+                sessao.Merge(cliente);
+                transaction.Commit();
+                return true;
+            }
+            return false;
+        }
+
+        public bool Excluir(int Codigo, out List<ValidationResult> erros)
+        {
+            erros = new List<ValidationResult>();
+            using var sessao = session.OpenSession();
+            using var transaction = sessao.BeginTransaction();
+            var cliente = sessao.Query<Cliente>()
+                .Where(d => d.Codigo == Codigo)
+                .FirstOrDefault();
+            if (cliente == null)
+            {
+                erros.Add(new ValidationResult("Cliente Não Encontrada",
+                    new[] { "Codigo" }));
+                return false;
+            }
+
+            sessao.Delete(cliente);
+            transaction.Commit();
+            return true;
+        }
+
+        // Linha dwadwdawdawdawdwad
 
         private static List<Cliente> Clientes = new List<Cliente>()
         {
@@ -28,11 +114,6 @@ namespace Vendinha.Services
                 );
 
             return valido;
-        }
-
-        public static List<Cliente> Listar()
-        {
-            return Clientes;
         }
 
         public static List<Cliente> Listar(string buscaCliente,

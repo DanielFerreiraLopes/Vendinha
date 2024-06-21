@@ -24,7 +24,7 @@ namespace Vendinha.Services
             var valido = Validator.TryValidateObject(divida,
                 new ValidationContext(divida),
                 erros,
-                true
+                true    
                 );
 
             return valido;
@@ -33,17 +33,18 @@ namespace Vendinha.Services
         public virtual List<Divida> Listar()
         {
             using var sessao = session.OpenSession();
-            var dividas = sessao.Query<Divida>().ToList();
+            var dividas = sessao.Query<Divida>().OrderByDescending(d => d.Id).ToList();
             return dividas;
 
         }
 
-        public virtual List<Divida> Lista(string pesquisa)
+        public virtual List<Divida> Listar(string pesquisa)
         {
             using var sessao = session.OpenSession();
             var dividas = sessao.Query<Divida>()
                 .Where(d => d.ClienteCodigo.ToString() == pesquisa ||
                             d.Valor.ToString() == pesquisa ||
+                            d.Situacao.Contains(pesquisa) ||
                             d.Descricao.Contains(pesquisa)).ToList();
             return dividas;
 

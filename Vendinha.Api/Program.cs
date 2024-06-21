@@ -20,8 +20,6 @@ builder.Services.AddSingleton<ISessionFactory>((s) =>
 });
 
 builder.Services.AddTransient<ClienteService>();
-
-
 builder.Services.AddTransient<DividaService>();
 
 builder.Services.AddCors(
@@ -40,7 +38,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors();
+
 app.UseAuthorization();
+
+app.UseDeveloperExceptionPage();
 
 app.MapControllers();
 
