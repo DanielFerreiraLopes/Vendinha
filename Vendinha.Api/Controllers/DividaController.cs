@@ -25,6 +25,13 @@ namespace Vendinha.Api.Controllers
             return Ok(gets);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var dados = dividaService.Retorna(id);
+            return Ok(dados);
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] Divida divida)
         {

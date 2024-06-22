@@ -30,6 +30,13 @@ namespace Vendinha.Services
             return valido;
         }
 
+        public virtual Divida Retorna(int id)
+        {
+            using var sessao = session.OpenSession();
+            var divida = sessao.Get<Divida>(id);
+            return divida;
+        }
+
         public virtual List<Divida> Listar()
         {
             using var sessao = session.OpenSession();

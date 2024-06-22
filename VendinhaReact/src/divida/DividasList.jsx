@@ -59,7 +59,7 @@ export default function DividasList() {
             </tr>
           </thead>
           <tbody>
-            {dividas.map((divida) => (
+            {dividas.map(divida => (
               <tr onClick={() => getDivida(divida.id)} key={divida.id}>
                 <td>{divida.id}</td>
                 <td>{divida.clienteCodigo}</td>
