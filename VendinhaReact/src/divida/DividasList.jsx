@@ -26,7 +26,6 @@ export default function DividasList() {
       setDivida(dados);
     }
   };
-
   return (
     <>
       <div className="content">
@@ -36,8 +35,13 @@ export default function DividasList() {
             type="search"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
+            placeholder="Pesquisar..."
           />
-          <button type="button" onClick={() => setDivida({})}>
+          <button
+            type="button"
+            onClick={() => setDivida({})}
+            className="adicionar"
+          >
             Adicionar Divida
           </button>
         </div>

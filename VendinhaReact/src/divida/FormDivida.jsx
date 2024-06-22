@@ -63,7 +63,6 @@ export default function FormDivida({ divida, onClose }) {
               type="checkbox"
               name="situacao"
             />
-            <span className="error"></span>
           </div>
 
           <div className="input">
