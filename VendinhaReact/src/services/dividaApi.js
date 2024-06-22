@@ -1,6 +1,6 @@
 const URL_API = "https://localhost:7233";
 
-export function listarDivida(pesquisa) {
+export function listarDividas(pesquisa) {
 
     var response = pesquisa ?
         fetch(URL_API + "/api/Divida?pesquisa=" + pesquisa) :

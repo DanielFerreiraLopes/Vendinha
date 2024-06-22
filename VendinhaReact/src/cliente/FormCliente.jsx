@@ -67,30 +67,31 @@ export default function FormCliente() {
     }, []);
 
     return cliente &&(<>
+    <div className="content">
         <h1>{codigo ? "Editar" : "Cadastrar"} Cliente</h1>
-        <form onSubmit={salvarCliente}>
+    <form onSubmit={salvarCliente} className="form_cliente">
 
             <div className="input">
-                <label>Nome</label>
-                <input defaultValue={cliente.nome} type="text" name="nome" minLength="10"/>
+                <label>Nome: </label>
+                <input defaultValue={cliente.nome} placeholder="Nome do cliente" type="text" name="nome" minLength="10"/>
                 <span className="error"></span>
             </div>
 
             <div className="input">
-                <label>Data de Nascimento</label>
+                <label>CPF: </label>
+                <input value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="CPF do cliente" type="text" name="cpf" />
+                <span className="error"></span>
+            </div>
+
+            <div className="input">
+                <label>Email: </label>
+                <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email do cliente" type="email" name="email" />
+                <span className="error"></span>
+            </div>
+
+            <div className="input">
+                <label>Data de Nascimento: </label>
                 <input defaultValue={cliente.dataNascimento?.substring(0, 10)} type="date" name="dataNascimento"/>
-                <span className="error"></span>
-            </div>
-
-            <div className="input">
-                <label>CPF</label>
-                <input value={cpf} onChange={(e) => setCpf(e.target.value)} type="text" name="cpf" />
-                <span className="error"></span>
-            </div>
-
-            <div className="input">
-                <label>Email</label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" name="email" />
                 <span className="error"></span>
             </div>
 
@@ -100,5 +101,6 @@ export default function FormCliente() {
             <p className="error">{errorMessage}</p>
 
         </form>
+        </div>
     </>)
 }

@@ -15,7 +15,7 @@ namespace Vendinha.Entidades
 
         public decimal Valor { get; set; }
         
-        public string Situacao { get; set; }
+        public bool Situacao { get; set; }
 
         public DateTime Data { get; set; } = DateTime.Now;
 

@@ -44,7 +44,6 @@ namespace Vendinha.Services
             var dividas = sessao.Query<Divida>()
                 .Where(d => d.ClienteCodigo.ToString() == pesquisa ||
                             d.Valor.ToString() == pesquisa ||
-                            d.Situacao.Contains(pesquisa) ||
                             d.Descricao.Contains(pesquisa)).ToList();
             return dividas;
 

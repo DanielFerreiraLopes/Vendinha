@@ -1,6 +1,19 @@
 body {
   margin: 0px;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  height: 100%;
 }
+
+h1{
+  font-size: 60px;
+  margin: 8px 0px 8px 0px;
+}
+
+.content{
+  margin: 32px;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -69,12 +82,14 @@ nav ul {
   gap: 8px;
   margin: 0px;
   padding: 8px;
-  background-color: #13ba53;
+  background-color: #04AA6D;
+  justify-content: center;
+  text-align: center;
 }
 
 nav li {
   line-height: 150%;
-  font-size: 16px;
+  font-size: 20px;
   color: #fff;
   font-weight: 600;
   text-decoration: none;
@@ -89,7 +104,6 @@ nav a {
 
 nav li:hover {
   line-height: 150%;
-  font-size: 16px;
   color: #fff;
   font-weight: 700;
   text-decoration: none;
@@ -103,12 +117,6 @@ nav li:hover {
   display: inline-block;
   width: 60px;
   height: 34px;
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
 }
 
 .slider {
@@ -135,20 +143,6 @@ nav li:hover {
   transition: .4s;
 }
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
 /* Rounded sliders */
 .slider.round {
   border-radius: 34px;
@@ -157,3 +151,153 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+/* Table */
+
+#table-divida {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table-divida td, #table-divida th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#table-divida tr:nth-child(even){background-color: #686666;}
+
+#table-divida tr:hover {background-color: #08f29c;}
+
+#table-divida th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* Clientes */
+
+.card ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  padding-left: 0px;
+  justify-content: center;
+}
+
+.card li{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card .title{
+  font-size: 20px;
+  font-weight: 300;
+  display: flex;
+  flex-direction: grid;
+}
+.card .title .codigo{
+  font-size: 12px;
+  font-weight: 200;
+}
+
+.card button{
+  background-color: rgb(228, 20, 20);
+}
+
+.card:hover {
+  box-shadow: 5px 5px 8px #565656;
+}
+
+.card {
+  border: 3px solid rgb(255, 255, 255);
+  border-radius: 16px;
+  max-width: 240px;
+  padding: 8px 12px 8px 12px;
+ 
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.list {
+  padding: 16px 0px 16px 0px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  height: 100%;
+}
+
+.list ul {
+  list-style: none;
+}
+
+.list li {
+  line-height: 150%;
+}
+
+.acoes {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+}
+
+/* Forms */
+
+input[type=text],
+input[type=number],
+input[type=email],
+textarea{
+  border-radius: 8px;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #d0cece;
+}
+
+input[type=search]:focus {
+  background-color: #21c88b6e;
+}
+
+input{
+  padding: 8px;
+  width: 270px;
+  border-radius: 8px;
+  border: 1px solid #d0cece;
+  margin: 8px 0 8px 0;
+}
+
+.modal {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.modal form {
+  background-color: rgb(43, 41, 41);
+  padding: 16px;
+  min-height: 400px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+div.input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+

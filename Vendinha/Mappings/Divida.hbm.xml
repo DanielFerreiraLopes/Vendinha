@@ -11,7 +11,7 @@
 		</id>
 		<property name="ClienteCodigo"	type="int"						/>
 		<property name="Valor"			type="decimal"					/>
-		<property name="Situacao"		type="string"	length="50"		/>
+		<property name="Situacao"		type="bool"						/>
 		<property name="Data"			type="Date"						/>
 		<property name="DataPagamento"	type="Date"						/>
 		<property name="Descricao"		type="string"	length="5000"	/>

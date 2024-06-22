@@ -37,14 +37,6 @@ function App() {
         path: "dividas",
         component: <DividasList></DividasList>
       },
-      {
-        path: "dividas/registrar",
-        component: <FormDivida></FormDivida>
-      },
-      {
-        path: "dividas/editar/:id(numero)",
-        component: <FormDivida></FormDivida>
-      },
       
     ]}>
       <div className=""></div>
