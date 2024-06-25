@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Vendinha.Entidades;
 using Vendinha.Services;
 using NHibernate;
+using Vendinha.Dtos;
 
 namespace Vendinha.Api.Controllers
 {
@@ -32,6 +33,7 @@ namespace Vendinha.Api.Controllers
             var cliente = clienteService.Retorna(codigo);
                 return Ok(cliente);
         }
+
 
         [HttpPost]
         public IActionResult Criar([FromBody] Cliente cliente)
@@ -82,6 +84,14 @@ namespace Vendinha.Api.Controllers
             {
                 return Ok(cliente);
             }
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult Dividas()
+        {
+            // ternário
+            var insc = clienteService.ListarDividas();
+            return Ok(insc);
         }
     }
 }

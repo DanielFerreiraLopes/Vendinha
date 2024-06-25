@@ -15,6 +15,11 @@ export function getByCodigo(codigo) {
     return response;
 }
 
+export function dividasCliente(codigoCliente){
+    var response = fetch(URL_API + "/api/Cliente/dividas/" + codigoCliente);
+    return response;
+}
+
 export function postCliente(cliente) {
 
     var request = {

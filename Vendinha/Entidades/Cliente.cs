@@ -28,6 +28,9 @@ namespace Vendinha.Entidades
             set => email = value?.ToLower(); 
         }
 
+        public IList<Divida> Dividas { get; set; }
+
+
         public virtual void PrintDados()
         {
             Console.WriteLine(

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getById, listarDividas } from "../services/dividaApi";
 import FormDivida from "./FormDivida";
+import Datas from "../layout/Datas";
 
 export default function DividasList() {
   var [dividas, setDividas] = useState([]);
@@ -59,14 +60,18 @@ export default function DividasList() {
             </tr>
           </thead>
           <tbody>
-            {dividas.map(divida => (
+            {dividas.map((divida) => (
               <tr onClick={() => getDivida(divida.id)} key={divida.id}>
                 <td>{divida.id}</td>
                 <td>{divida.clienteCodigo}</td>
                 <td>{divida.valor}</td>
                 <td>{divida.situacao ? "Pagado" : "Não Pago"}</td>
-                <td>{divida.data}</td>
-                <td>{divida.dataPagamento}</td>
+                <td>
+                  <Datas date={divida.data}></Datas>
+                </td>
+                <td>
+                  <Datas date={divida.dataPagamento}></Datas>
+                </td>
                 <td>{divida.descricao}</td>
               </tr>
             ))}

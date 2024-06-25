@@ -32,6 +32,8 @@ namespace Vendinha.Api.Controllers
             return Ok(dados);
         }
 
+       
+
         [HttpPost]
         public IActionResult Post([FromBody] Divida divida)
         {

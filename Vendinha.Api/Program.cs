@@ -19,6 +19,13 @@ builder.Services.AddSingleton<ISessionFactory>((s) =>
     return config.BuildSessionFactory();
 });
 
+builder.Services.AddMvcCore().AddJsonOptions(
+    x =>
+    {
+        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    }
+);
+
 builder.Services.AddTransient<ClienteService>();
 builder.Services.AddTransient<DividaService>();
 

@@ -4,7 +4,9 @@ import { postDivida } from "../services/dividaApi";
 export default function FormDivida({ divida, onClose }) {
   const [errorMessage, setErrorMessage] = useState();
 
-  const [checkboxSituacao, setCheckboxSituacao] = useState(false);
+  const [checkboxSituacao, setCheckboxSituacao] = useState(
+    divida.situacao || false
+  );
   const salvarDivida = async (evento) => {
     evento.preventDefault();
     var dados = new FormData(evento.target);
@@ -49,16 +51,19 @@ export default function FormDivida({ divida, onClose }) {
 
           <div className="input">
             <label>Valor</label>
-            <input defaultValue={divida.valor} type="number" name="valor" />
+            <input
+              defaultValue={divida.valor}
+              type="number"
+              name="valor"
+              step={0.01}
+            />
             <span className="error"></span>
           </div>
 
           <div className="input">
             <label>Situacao</label>
             <input
-              defaultValue={checkboxSituacao}
-              value={checkboxSituacao}
-              onClick={() => setCheckboxSituacao(!checkboxSituacao)}
+              onChange={() => setCheckboxSituacao(!checkboxSituacao)}
               checked={checkboxSituacao}
               type="checkbox"
               name="situacao"

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendinha.Entidades;
+using Vendinha.Dtos;
 
 namespace Vendinha.Services
 {
@@ -33,7 +34,7 @@ namespace Vendinha.Services
                 .Where(c => c.Codigo.ToString() == buscaCliente ||
                             c.Nome.Contains(buscaCliente) ||
                             c.Email.Contains(buscaCliente) ||
-                            c.Cpf.Contains(buscaCliente))
+                            c.Cpf.ToString() == buscaCliente)
                     .OrderBy(c => c.Codigo)
                     .ToList();
             return clientes;
@@ -95,7 +96,16 @@ namespace Vendinha.Services
             return true;
         }
 
-        // Linha dwadwdawdawdawdwad
+        public List<Divida> ListarDividas()
+        {
+            using var sessao = session.OpenSession();
+            var insc = sessao.Query<Divida>()
+                .OrderBy(c => c.Id)
+                .ToList();
+            return insc;
+        }
+
+        // --------------------------------------------------------
 
         private static List<Cliente> Clientes = new List<Cliente>()
         {
@@ -124,7 +134,7 @@ namespace Vendinha.Services
             a.Codigo.ToString() == buscaCliente ||
             a.Nome.Contains(buscaCliente, StringComparison.OrdinalIgnoreCase) ||
             a.Email.Contains(buscaCliente) ||
-            a.Cpf.Contains(buscaCliente) 
+            a.Cpf.ToString() == buscaCliente
             )
             .OrderBy(x => x.DataNascimento)
             .AsEnumerable();

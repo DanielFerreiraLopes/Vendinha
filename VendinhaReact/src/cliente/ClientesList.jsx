@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { listarCliente } from "../services/clienteApi";
 import { Link } from "simple-react-routing";
+import Datas from "../layout/Datas";
 
 export default function ClientesList(properties) {
   const [lista, setLista] = useState([]);
@@ -49,28 +50,30 @@ export default function ClientesList(properties) {
 
 function ClienteItem(c) {
   const cliente = c.cliente;
-  var data = new Date(cliente.dataNascimento);
-  var dia = data.getDate().toString().padStart(2, "0");
-  var mes = (data.getMonth() + 1).toString().padStart(2, "0");
-  var ano = data.getFullYear();
 
   return (
     <div className="card">
       <ul className="item">
         <div className="title">
-          <li>
-            {cliente.nome} <div className="codigo">( {cliente.codigo} )</div>
-          </li>
+          <li>{cliente.nome}</li>
         </div>
-        <li>{cliente.cpf}</li>
+        <li>
+          {cliente.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d+)/, "$1.$2.$3-$4")}
+        </li>
         <li>{cliente.email}</li>
         <li>
-          {dia}/{mes}/{ano}
+          <Datas date={cliente.dataNascimento}></Datas>
         </li>
+        <li>Total de Dividas: {cliente.dividas.length}</li>
         <div className="acoes">
           <li>
             <Link to={"/clientes/editar/" + cliente.codigo} className="button">
               Editar{" "}
+            </Link>
+          </li>
+          <li>
+            <Link to={"/cliente/dividas/" + cliente.codigo} className="button">
+              Dividas{" "}
             </Link>
           </li>
           <li>
