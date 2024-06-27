@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using Vendinha.Entidades;
 using Vendinha.Services;
 using NHibernate;
-using Vendinha.Dtos;
 
 namespace Vendinha.Api.Controllers
 {
@@ -19,11 +18,11 @@ namespace Vendinha.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult Listar(string pesquisa) 
+        public IActionResult Listar(string pesquisa, int page = 0, int pageSize = 0) 
         { 
                 var clientes = string.IsNullOrEmpty(pesquisa) ?
-                    clienteService.Listar() :
-                    clienteService.Listar(pesquisa);
+                    clienteService.Listar(page, pageSize) :
+                    clienteService.Listar(pesquisa, page, pageSize);
             return Ok(clientes);
         }
 
@@ -86,12 +85,11 @@ namespace Vendinha.Api.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public IActionResult Dividas()
+        [HttpGet("dividas/{codigocliente}")]
+        public IActionResult Dividas(int codigocliente, bool situacao)
         {
-            // ternário
-            var insc = clienteService.ListarDividas();
-            return Ok(insc);
+            var dividas = clienteService.ListarDividas(codigocliente);
+            return Ok(dividas);
         }
     }
 }

@@ -1,10 +1,12 @@
 const URL_API = "https://localhost:7233";
 
-export function listarCliente(pesquisa) {
+export function listarCliente(pesquisa, page, pageSize) {   
+
+    var data = page == 0 ? "" : `page=${page}&pageSize=${pageSize}`;
 
     var response = pesquisa ?
-        fetch(URL_API + "/api/Cliente?pesquisa=" + pesquisa) :
-        fetch(URL_API + "/api/Cliente");
+        fetch(URL_API + "/api/Cliente?pesquisa=" + pesquisa + "&" + data) :
+        fetch(URL_API + "/api/Cliente" + data);
 
     return response;
 }

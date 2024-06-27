@@ -56,7 +56,7 @@ export default function DividasList() {
               <th>Situacao</th>
               <th>Data de Registro</th>
               <th>Data de Pagamento</th>
-              <th>Descrição</th>
+              <th className="descricao">Descrição</th>
             </tr>
           </thead>
           <tbody>
@@ -64,8 +64,8 @@ export default function DividasList() {
               <tr onClick={() => getDivida(divida.id)} key={divida.id}>
                 <td>{divida.id}</td>
                 <td>{divida.clienteCodigo}</td>
-                <td>{divida.valor}</td>
-                <td>{divida.situacao ? "Pagado" : "Não Pago"}</td>
+                <td>R${divida.valor}</td>
+                <td>{divida.situacao ? "Pago" : "Não Pago"}</td>
                 <td>
                   <Datas date={divida.data}></Datas>
                 </td>

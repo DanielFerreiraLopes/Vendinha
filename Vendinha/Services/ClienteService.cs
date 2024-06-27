@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vendinha.Entidades;
-using Vendinha.Dtos;
+using System.Drawing.Printing;
 
 namespace Vendinha.Services
 {
@@ -19,24 +19,32 @@ namespace Vendinha.Services
             this.session = session;
         }
 
-        public virtual List<Cliente> Listar()
+        public virtual List<Cliente> Listar(int page, int pageSize)
         {
             using var sessao = session.OpenSession();
-            var clientes = sessao.Query<Cliente>().OrderByDescending(c => c.Codigo).ToList();
+            var clientes = page == 0 ? sessao.Query<Cliente>()
+                .OrderByDescending(c => c.Codigo)
+                .ToList() :
+                sessao.Query<Cliente>()
+                .OrderByDescending(c => c.Codigo)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
             return clientes;
 
         }
 
-        public virtual List<Cliente> Listar(string buscaCliente)
+        public virtual List<Cliente> Listar(string buscaCliente, int page, int pageSize)
         {
             using var sessao = session.OpenSession();
             var clientes = sessao.Query<Cliente>()
-                .Where(c => c.Codigo.ToString() == buscaCliente ||
-                            c.Nome.Contains(buscaCliente) ||
-                            c.Email.Contains(buscaCliente) ||
-                            c.Cpf.ToString() == buscaCliente)
-                    .OrderBy(c => c.Codigo)
-                    .ToList();
+                .Where(c => c.Nome.Contains(buscaCliente) ||
+                            c.Email.Contains(buscaCliente))
+                .OrderBy(c => c.Dividas)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
             return clientes;
 
         }
@@ -96,13 +104,25 @@ namespace Vendinha.Services
             return true;
         }
 
-        public List<Divida> ListarDividas()
+        public List<Divida> ListarDividas(int codigocliente)
         {
             using var sessao = session.OpenSession();
-            var insc = sessao.Query<Divida>()
-                .OrderBy(c => c.Id)
+            var dividas = sessao.Query<Divida>()
+                .Where(d => d.ClienteCodigo == codigocliente)
+                .OrderBy(d => d.Id)
                 .ToList();
-            return insc;
+            return dividas;
+        }
+
+        public List<Divida> ListarDividas(int codigocliente, bool situacao)
+        {
+            using var sessao = session.OpenSession();
+            var dividas = sessao.Query<Divida>()
+                .Where(d => d.ClienteCodigo == codigocliente &&
+                d.Situacao == situacao)
+                .OrderBy(d => d.Id)
+                .ToList();
+            return dividas;
         }
 
         // --------------------------------------------------------
@@ -124,31 +144,6 @@ namespace Vendinha.Services
                 );
 
             return valido;
-        }
-
-        public static List<Cliente> Listar(string buscaCliente,
-            int skip = 0,
-            int pageSize = 0)
-        {
-            var pesquisa = Clientes.Where(a =>
-            a.Codigo.ToString() == buscaCliente ||
-            a.Nome.Contains(buscaCliente, StringComparison.OrdinalIgnoreCase) ||
-            a.Email.Contains(buscaCliente) ||
-            a.Cpf.ToString() == buscaCliente
-            )
-            .OrderBy(x => x.DataNascimento)
-            .AsEnumerable();
-
-            if (skip > 0)
-            {
-                pesquisa = pesquisa.Skip(skip);
-            }
-            if (pageSize > 0)
-            {
-                pesquisa = pesquisa.Take(pageSize);
-            }
-
-            return pesquisa.ToList();
         }
 
         public static bool CriarCliente(Cliente cliente, out List<ValidationResult> erros)

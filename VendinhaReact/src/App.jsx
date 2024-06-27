@@ -12,8 +12,6 @@ import FormDivida from "./divida/FormDivida";
 import PageCliente from "./cliente/PageCliente";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <BrowserRouter
       notFoundPage={<h1> Erro 404 - Não Encontrado</h1>}

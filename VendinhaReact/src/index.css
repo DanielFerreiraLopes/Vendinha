@@ -4,6 +4,9 @@ body {
   width: 100%;
   height: 100%;
 }
+*{
+  transition: all .3s;
+}
 
 h1{
   font-size: 60px;
@@ -70,6 +73,24 @@ button:focus-visible {
   }
 }
 
+.link{
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 10px 16px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.link:hover {
+  border-color: #f5f5f7;
+}
+.link:focus,
+.link:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
 /* NAVBAR */
 
 nav {
@@ -177,14 +198,18 @@ nav li:hover {
   color: white;
 }
 
+#table-divida .descricao{
+  width: 40%;
+}
+
 /* Clientes */
 
 .card ul {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding-top: 8px;
-  padding-left: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
   justify-content: center;
 }
 
@@ -196,17 +221,14 @@ nav li:hover {
 
 .card .title{
   font-size: 20px;
-  font-weight: 300;
+  font-weight: 600;
   display: flex;
   flex-direction: grid;
-}
-.card .title .codigo{
-  font-size: 12px;
-  font-weight: 200;
 }
 
 .card button{
   background-color: rgb(228, 20, 20);
+  padding: 10px 16px;
 }
 
 .card:hover {
@@ -214,21 +236,18 @@ nav li:hover {
 }
 
 .card {
-  border: 3px solid rgb(255, 255, 255);
-  border-radius: 16px;
-  max-width: 240px;
-  padding: 8px 12px 8px 12px;
- 
-  height: 240px;
+  border: 1px solid rgb(1, 1, 1);
+  background-color: white;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  color: black;
+  padding: 0;
 }
 
 .list {
   padding: 16px 0px 16px 0px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   height: 100%;
 }
@@ -241,11 +260,21 @@ nav li:hover {
   line-height: 150%;
 }
 
-.acoes {
+.card .acoes {
   display: flex;
-  justify-content: space-around;
   align-items: center;
+  background-color: black;
+  padding: 0;
+}
 
+.card .acoes ul{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.acoes li{
+  display: flex;
 }
 
 /* Forms */
@@ -305,14 +334,36 @@ div.input {
 
 }
 
-
-
 .row{
   display: flex;
   flex-direction: row;
   gap: 16px;
   margin: 12px 0px 12px 0;
   align-items: center;
+}
+
+.cont_dividas{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 20px 0 20px;
+}
+
+.cont_dividas .total, .fechadas, .abertas{
+  border-radius: 10px;
+  padding: 16px;
+  margin: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.total{
+  background-color: rgb(8, 112, 141);
+}
+.abertas{
+  background-color: rgb(192, 6, 6);
+}
+.fechadas{
+  background-color: #1c9a48;
 }
 
 

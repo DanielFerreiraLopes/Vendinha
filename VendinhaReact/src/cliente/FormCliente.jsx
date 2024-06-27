@@ -121,8 +121,8 @@ export default function FormCliente() {
               {codigo ? "Atualizar Cliente" : "Cadastrar Cliente"}
             </button>
             <ul className="with-dots">
-              {cliente.dividas.map((insc) => (
-                <li>{insc.dividas.ip}</li>
+              {cliente.dividas.map((divida) => (
+                <li key={divida.id}>{divida.id}</li>
               ))}
             </ul>
             <p className="error">{errorMessage}</p>
