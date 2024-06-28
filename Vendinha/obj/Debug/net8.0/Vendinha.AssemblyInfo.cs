@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Vendinha")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43ca644a061b835d479e6d7aeac56cee0d9a14aa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66028199cc499e9423b45380d2aabbaf79825800")]
 [assembly: System.Reflection.AssemblyProductAttribute("Vendinha")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Vendinha")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

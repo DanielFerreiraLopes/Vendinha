@@ -6,7 +6,7 @@ export function listarCliente(pesquisa, page, pageSize) {
 
     var response = pesquisa ?
         fetch(URL_API + "/api/Cliente?pesquisa=" + pesquisa + "&" + data) :
-        fetch(URL_API + "/api/Cliente" + data);
+        fetch(URL_API + "/api/Cliente?" + data);
 
     return response;
 }

@@ -18,10 +18,6 @@ function App() {
       routes={[
         {
           path: "",
-          component: <Home></Home>,
-        },
-        {
-          path: "clientes",
           component: <ClientesList></ClientesList>,
         },
         {

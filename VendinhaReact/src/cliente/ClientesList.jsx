@@ -1,14 +1,23 @@
 import { useEffect, useReducer, useState } from "react";
-import { listarCliente } from "../services/clienteApi";
+import {
+  listarCliente,
+  getByCodigo,
+  deletarCliente,
+} from "../services/clienteApi";
 import { Link, useRouter } from "simple-react-routing";
-import Datas from "../layout/Datas";
+import Datas from "../assets/Datas";
+import { valorDividas } from "../assets/valorDivida";
+import DeleteCliente from "./DeleteCliente";
+import { listarDividas } from "../services/dividaApi";
 
 export default function ClientesList() {
-  const pageId = Number(window.location.search.split("=")[1]);
-  console.log(pageId);
+  const [pesquisa, setPesquisa] = useState("");
+
   const [lista, setLista] = useState([]);
-  const [pesquisa, setPesquisa] = useState([]);
-  const page = pageId ? pageId : 1;
+
+  const [page, setPage] = useState(1);
+
+  const [dividas, setDividas] = useState([]);
 
   useEffect(() => {
     listarCliente(pesquisa, page, 10).then((resposta) => {
@@ -20,9 +29,15 @@ export default function ClientesList() {
     });
   }, [pesquisa, page]);
 
-  const AlterPage = (page) => {
-    window.location.href = window.location.pathname + "?page=" + page;
-  };
+  useEffect(() => {
+    listarDividas().then((resposta) => {
+      if (resposta.status == 200) {
+        resposta.json().then((dividas) => {
+          setDividas(dividas);
+        });
+      }
+    });
+  });
 
   return (
     <>
@@ -37,10 +52,11 @@ export default function ClientesList() {
             }}
             placeholder="Pesquisar..."
           />
-
-          <Link to="/clientes/adicionar" className="button">
-            Adicionar Cliente
-          </Link>
+          <div id="addcliente" className="link">
+            <Link to="/clientes/adicionar" className="button">
+              Adicionar Cliente
+            </Link>
+          </div>
         </div>
 
         <div className="list" id="lista_clientes">
@@ -50,18 +66,30 @@ export default function ClientesList() {
             );
           })}
         </div>
-        <div>
-          <button
-            type="button"
-            onClick={() => AlterPage(page - 1)}
-            disabled={page <= 1}
-          >
-            Anterior
-          </button>
-          <span> {page} </span>
-          <button type="button" onClick={() => AlterPage(page + 1)}>
-            Próximo
-          </button>
+        <div className="barra_inferior">
+          <div className="paginacao">
+            <button
+              type="button"
+              onClick={() => setPage(page - 1)}
+              disabled={page <= 1}
+            >
+              Pagina Anterior
+            </button>
+            <span> {page} </span>
+            <button type="button" onClick={() => setPage(page + 1)}>
+              Próximo Pagina
+            </button>
+          </div>
+          <div className="contagem_dividas">
+            <div className="somadividas">
+              Dividas Abertas:{" "}
+              {dividas.filter((d) => d.situacao == false).length}
+            </div>
+            <div className="somadividas">
+              Valor Total das Dividas: R$
+              {valorDividas(dividas)}
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -87,6 +115,13 @@ function ClienteItem(c) {
     return age;
   };
 
+  const deleteCliente = async (codigo) => {
+    var result = await deletarCliente(codigo);
+    if (result.status == 200) {
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="card">
       <ul className="item">
@@ -94,6 +129,7 @@ function ClienteItem(c) {
           <div className="title">
             <li>{cliente.nome}</li>
           </div>
+          <li>Código: {cliente.codigo}</li>
           <li>
             {cliente.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d+)/, "$1.$2.$3-$4")}
           </li>
@@ -111,27 +147,34 @@ function ClienteItem(c) {
           </li>
           <li>
             Esta Devendo: {"R$"}
-            {cliente.dividas
-              .filter((divida) => divida.situacao === false)
-              .reduce((acc, divida) => acc + divida.valor, 0)}
+            {valorDividas(cliente.dividas)}
           </li>
         </div>
       </ul>
       <div className="acoes">
         <ul>
-          <li>
-            <div className="link">
-              <Link to={"/cliente/dividas/" + cliente.codigo}>Dividas </Link>
+          <li className="link">
+            <div>
+              <a href={"cliente/dividas/" + cliente.codigo}>
+                Dividas do Cliente{" "}
+              </a>
             </div>
           </li>
-          <li>
-            <div className="link">
-              <Link to={"/clientes/editar/" + cliente.codigo}>Editar </Link>
-            </div>
-          </li>
-          <li>
-            <button type="button">Excluir</button>
-          </li>
+          <div className="botoes">
+            <li className="link">
+              <div className="">
+                <Link to={"/clientes/editar/" + cliente.codigo}>Editar </Link>
+              </div>
+            </li>
+            <li>
+              <button
+                className="excluir"
+                onClick={() => deleteCliente(cliente.codigo)}
+              >
+                Excluir
+              </button>
+            </li>
+          </div>
         </ul>
       </div>
     </div>

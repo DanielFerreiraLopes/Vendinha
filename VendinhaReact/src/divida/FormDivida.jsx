@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postDivida } from "../services/dividaApi";
+import { getByCodigo } from "../services/clienteApi";
+import { valorDividas } from "../assets/valorDivida";
 
 export default function FormDivida({ divida, onClose }) {
   const [errorMessage, setErrorMessage] = useState();
+  const [cliente, setCliente] = useState();
 
   const [checkboxSituacao, setCheckboxSituacao] = useState(
     divida.situacao || false
@@ -20,15 +23,36 @@ export default function FormDivida({ divida, onClose }) {
       id: divida.id,
     };
 
-    var result = await postDivida(dividaDados);
+    var result = await getByCodigo(dividaDados.clienteCodigo);
     if (result.status == 200) {
-      onClose();
+      var dados = await result.json();
+      var cliente = dados;
+      console.log(cliente);
     } else {
-      var error = await result.json();
+      setErrorMessage("Este Código de Cliente é Invalido ou Não Existe");
+    }
+
+    if (
+      valorDividas(cliente.dividas) + dividaDados.valor >= 200 &&
+      dividaDados.situacao == false
+    ) {
       setErrorMessage(
-        "Houve erro ao registrar a divida: \n" +
-          JSON.stringify(error, null, "\t")
+        "O Cliente " +
+          cliente.nome +
+          "\n irá exceder o limite de dividas: R$" +
+          valorDividas(cliente.dividas)
       );
+    } else {
+      var result = await postDivida(dividaDados);
+      if (result.status == 200) {
+        onClose();
+      } else {
+        var error = await result.json();
+        setErrorMessage(
+          "Houve erro ao registrar a divida: \n" +
+            JSON.stringify(error, null, "\t")
+        );
+      }
     }
   };
 
@@ -38,30 +62,32 @@ export default function FormDivida({ divida, onClose }) {
         <div className="formulario">
           <div className="row">
             <div className="input">
-              <label>Codigo do Cliente</label>
+              <label>Código do Cliente:</label>
               <input
                 defaultValue={divida.clienteCodigo}
                 placeholder="Codigo do cliente"
                 type="number"
                 name="clienteCodigo"
+                required
               />
               <span className="error"></span>
             </div>
           </div>
 
           <div className="input">
-            <label>Valor</label>
+            <label>Valor da Divida:</label>
             <input
               defaultValue={divida.valor}
               type="number"
               name="valor"
               step={0.01}
+              max={200}
             />
             <span className="error"></span>
           </div>
 
           <div className="input">
-            <label>Situacao</label>
+            <label>Situação:</label>
             <input
               onChange={() => setCheckboxSituacao(!checkboxSituacao)}
               checked={checkboxSituacao}
@@ -71,20 +97,22 @@ export default function FormDivida({ divida, onClose }) {
           </div>
 
           <div className="input">
-            <label>Data de Pagamento</label>
+            <label>Data de Pagamento:</label>
             <input
               defaultValue={divida.dataPagamento?.substring(0, 10)}
               type="date"
               name="dataPagamento"
+              required
             />
             <span className="error"></span>
           </div>
           <div className="input">
-            <label>Descrição</label>
+            <label>Descrição:</label>
             <textarea
               defaultValue={divida.descricao}
               placeholder="Descrição de divida"
               name="descricao"
+              required
             ></textarea>
             <span className="error"></span>
           </div>

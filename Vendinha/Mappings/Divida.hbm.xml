@@ -14,7 +14,7 @@
 		<property name="Valor"			type="decimal"					/>
 		<property name="Situacao"		type="bool"						/>
 		<property name="Data"			type="Date"						/>
-		<property name="DataPagamento"	type="Date"						/>
+		<property name="DataPagamento"	type="Date"		not-null="true"	/>
 		<property name="Descricao"		type="string"	length="5000"	/>
 		
 		

@@ -30,29 +30,6 @@ export default function FormCliente() {
     }
   }, "");
 
-  const salvarCliente = async (evento) => {
-    evento.preventDefault();
-    var dados = new FormData(evento.target);
-
-    var cliente = {
-      codigo: codigo,
-      nome: dados.get("nome"),
-      cpf: dados.get("cpf").replaceAll(".", ""),
-      email: dados.get("email"),
-      dataNascimento: dados.get("dataNascimento"),
-    };
-
-    var resultado = await postCliente(cliente);
-    if (resultado.status == 200) {
-      navigateTo(null, "/clientes");
-    } else {
-      var erro = await resultado.json();
-      setErrorMessage(
-        "Algo deu errado no cadastro de cliente: \n" +
-          JSON.stringify(erro, null, "\t")
-      );
-    }
-  };
   useEffect(() => {
     if (codigo) {
       getByCodigo(codigo)
@@ -63,22 +40,69 @@ export default function FormCliente() {
     }
   }, []);
 
+  const salvarCliente = async (evento) => {
+    evento.preventDefault();
+    var dados = new FormData(evento.target);
+
+    var clientedados = {
+      codigo: codigo,
+      nome: dados.get("nome"),
+      cpf: dados.get("cpf").replaceAll(".", ""),
+      email: dados.get("email"),
+      dataNascimento: dados.get("dataNascimento"),
+    };
+
+    const DataAtual = new Date().getFullYear();
+    const anoNascimento = new Date(clientedados.dataNascimento);
+    const year = anoNascimento.getFullYear();
+
+    if (year >= DataAtual) {
+      setErrorMessage("Esta Data de Nascimento Não é Valida");
+    } else {
+      var resultado = await postCliente(clientedados);
+      if (resultado.status == 200) {
+        navigateTo(null, "/");
+      } else {
+        var erro = await resultado.json();
+        setErrorMessage(
+          "Algo deu errado no cadastro de cliente: \n" +
+            JSON.stringify(erro, null, "\t")
+        );
+      }
+    }
+  };
+
   return (
     cliente && (
       <>
         <div className="content">
-          <h1>{codigo ? "Editar" : "Cadastrar"} Cliente</h1>
+          <div className="titulo">
+            <h1>{codigo ? "Editar" : "Cadastrar"} Cliente</h1>
+          </div>
           <form onSubmit={salvarCliente} className="form_cliente">
-            <div className="input">
-              <label>Nome: </label>
-              <input
-                defaultValue={cliente.nome}
-                placeholder="Nome do cliente"
-                type="text"
-                name="nome"
-                minLength="10"
-              />
-              <span className="error"></span>
+            <div className="row">
+              <div className="input">
+                <label>Nome: </label>
+                <input
+                  defaultValue={cliente.nome}
+                  placeholder="Nome do cliente"
+                  type="text"
+                  name="nome"
+                  minLength="8"
+                  required
+                />
+                <span className="error"></span>
+              </div>
+              <div className="input">
+                <label>Data de Nascimento: </label>
+                <input
+                  defaultValue={cliente.dataNascimento?.substring(0, 10)}
+                  type="date"
+                  name="dataNascimento"
+                  required
+                />
+                <span className="error"></span>
+              </div>
             </div>
 
             <div className="input">
@@ -89,6 +113,7 @@ export default function FormCliente() {
                 placeholder="CPF do cliente"
                 type="text"
                 name="cpf"
+                required
               />
               <span className="error"></span>
             </div>
@@ -101,16 +126,7 @@ export default function FormCliente() {
                 placeholder="Email do cliente"
                 type="email"
                 name="email"
-              />
-              <span className="error"></span>
-            </div>
-
-            <div className="input">
-              <label>Data de Nascimento: </label>
-              <input
-                defaultValue={cliente.dataNascimento?.substring(0, 10)}
-                type="date"
-                name="dataNascimento"
+                required
               />
               <span className="error"></span>
             </div>
@@ -120,11 +136,7 @@ export default function FormCliente() {
             <button type="submit">
               {codigo ? "Atualizar Cliente" : "Cadastrar Cliente"}
             </button>
-            <ul className="with-dots">
-              {cliente.dividas.map((divida) => (
-                <li key={divida.id}>{divida.id}</li>
-              ))}
-            </ul>
+            <ul className="with-dots"></ul>
             <p className="error">{errorMessage}</p>
           </form>
         </div>

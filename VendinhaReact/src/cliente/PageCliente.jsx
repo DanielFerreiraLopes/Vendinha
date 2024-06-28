@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "simple-react-routing";
 import { dividasCliente, getByCodigo } from "../services/clienteApi";
 import FormDivida from "../divida/FormDivida";
-import { getById } from "../services/dividaApi";
-import Datas from "../layout/Datas";
+import { getById, listarDividas } from "../services/dividaApi";
+import Datas from "../assets/Datas";
+import { valorDividas } from "../assets/valorDivida";
 
 export default function PageCliente() {
   const { pathParams } = useRouter();
@@ -14,9 +15,11 @@ export default function PageCliente() {
 
   const [dados, setDados] = useState([]);
 
-  const [dividas, setDividas] = useState();
+  const [dividas, setDividas] = useState([]);
 
-  const [divida, setDivida] = useState();
+  var [divida, setDivida] = useState();
+
+  console.log(codigo);
 
   useEffect(() => {
     getByCodigo(codigo)
@@ -28,8 +31,8 @@ export default function PageCliente() {
     dividasCliente(codigo)
       .then((d) => d.json())
       .then((resultado) => {
-        setDados(resultado);
         setDividas(resultado);
+        setDados(resultado);
       });
   }, []);
 
@@ -62,6 +65,8 @@ export default function PageCliente() {
       <>
         <div className="content">
           <h1>Dividas: {cliente.nome} </h1>
+
+          <h3>Codigo: {cliente.codigo}</h3>
           <h3>
             CPF:{" "}
             {cliente.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d+)/, "$1.$2.$3-$4")}
@@ -72,7 +77,7 @@ export default function PageCliente() {
             {calcularIdade(cliente.dataNascimento)} Anos
           </h3>
           <div className="cont_dividas">
-            <button className="total" onClick={() => setDividas(dados)}>
+            <button className="todas" onClick={() => setDividas(dados)}>
               Dividas Registradas: {dados.length}
             </button>
             <button
@@ -81,7 +86,7 @@ export default function PageCliente() {
                 setDividas(dados.filter((divida) => divida.situacao === false))
               }
             >
-              Total de Dividas Abertas:{" "}
+              Todas as Dividas Abertas:{" "}
               {dados.filter((divida) => divida.situacao === false).length}
             </button>
             <button
@@ -90,9 +95,13 @@ export default function PageCliente() {
                 setDividas(dados.filter((divida) => divida.situacao === true))
               }
             >
-              Total de Dividas Fechadas:{" "}
+              Todas as Dividas Fechadas:{" "}
               {dados.filter((divida) => divida.situacao === true).length}
             </button>
+            <div className="valor_total">
+              Esta Devendo: R$
+              {valorDividas(cliente.dividas)}
+            </div>
           </div>
           <table id="table-divida">
             <thead>
@@ -109,14 +118,19 @@ export default function PageCliente() {
                 return (
                   <tr onClick={() => getDivida(divida.id)} key={divida.id}>
                     <td>R$ {divida.valor}</td>
-                    <td>{divida.situacao ? "Pago" : "Não Pago"}</td>
+                    <td
+                      id="situacao"
+                      className={divida.situacao ? "pago" : "nao_pago"}
+                    >
+                      {divida.situacao ? "Pago" : "Não Pago"}
+                    </td>
                     <td>
                       <Datas date={divida.data}></Datas>
                     </td>
                     <td>
                       <Datas date={divida.dataPagamento}></Datas>
                     </td>
-                    <td>{divida.descricao}</td>
+                    <td className="descricao">{divida.descricao}</td>
                   </tr>
                 );
               })}

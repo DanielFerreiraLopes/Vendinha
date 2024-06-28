@@ -40,7 +40,7 @@ namespace Vendinha.Services
         public virtual List<Divida> Listar()
         {
             using var sessao = session.OpenSession();
-            var dividas = sessao.Query<Divida>().OrderByDescending(d => d.Id).ToList();
+            var dividas = sessao.Query<Divida>().OrderByDescending(d => d.Valor).ToList();
             return dividas;
 
         }

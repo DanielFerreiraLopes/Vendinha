@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vendinha.Entidades;
 using System.Drawing.Printing;
+using System.Linq;
 
 namespace Vendinha.Services
 {
@@ -22,17 +23,21 @@ namespace Vendinha.Services
         public virtual List<Cliente> Listar(int page, int pageSize)
         {
             using var sessao = session.OpenSession();
-            var clientes = page == 0 ? sessao.Query<Cliente>()
-                .OrderByDescending(c => c.Codigo)
-                .ToList() :
-                sessao.Query<Cliente>()
-                .OrderByDescending(c => c.Codigo)
+            var clientes = sessao.Query<Cliente>()
+                .Select(c => new
+                {
+                    Cliente = c,
+                    TotalDividas = c.Dividas.Where(d => !d.Situacao).Sum(d => d.Valor),
+                    TemDividas = c.Dividas.Any(d => !d.Situacao)
+                })
+                .OrderBy(c => !c.TemDividas)
+                .ThenByDescending(c => c.TotalDividas)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .Select(c => c.Cliente)
                 .ToList();
 
             return clientes;
-
         }
 
         public virtual List<Cliente> Listar(string buscaCliente, int page, int pageSize)
@@ -40,8 +45,10 @@ namespace Vendinha.Services
             using var sessao = session.OpenSession();
             var clientes = sessao.Query<Cliente>()
                 .Where(c => c.Nome.Contains(buscaCliente) ||
-                            c.Email.Contains(buscaCliente))
-                .OrderBy(c => c.Dividas)
+                            c.Email.Contains(buscaCliente) ||
+                            c.Cpf.Contains(buscaCliente))
+                .OrderBy(c => !c.Dividas.Any(d => !d.Situacao))
+                .ThenByDescending(c => c.Dividas.Where(d => !d.Situacao).Sum(d => d.Valor))
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -109,7 +116,7 @@ namespace Vendinha.Services
             using var sessao = session.OpenSession();
             var dividas = sessao.Query<Divida>()
                 .Where(d => d.ClienteCodigo == codigocliente)
-                .OrderBy(d => d.Id)
+                .OrderByDescending(d => d.Valor)
                 .ToList();
             return dividas;
         }
@@ -120,7 +127,7 @@ namespace Vendinha.Services
             var dividas = sessao.Query<Divida>()
                 .Where(d => d.ClienteCodigo == codigocliente &&
                 d.Situacao == situacao)
-                .OrderBy(d => d.Id)
+                .OrderBy(d => d.Valor)
                 .ToList();
             return dividas;
         }

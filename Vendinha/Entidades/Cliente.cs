@@ -12,10 +12,9 @@ namespace Vendinha.Entidades
         public int Codigo { get; set; }
 
         public string Nome { get; set; }
-        [Required, StringLength(50, MinimumLength = 8)]
+        [Required, StringLength(50, MinimumLength = 11)]
 
         public string Cpf { get; set; }
-        [Required]
 
         public DateTime? DataNascimento { get; set; }
 
