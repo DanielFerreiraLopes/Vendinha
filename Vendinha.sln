@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vendinha", "Vendinha\Vendinha.csproj", "{7942C410-3C50-4BB6-82C3-6D7D0BDA787C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vendinha.Api", "Vendinha.Api\Vendinha.Api.csproj", "{5F11E47D-EDC5-4CFB-B111-23BB6AE677AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vendinha.Api", "Vendinha.Api\Vendinha.Api.csproj", "{5F11E47D-EDC5-4CFB-B111-23BB6AE677AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
