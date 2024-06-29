@@ -27,7 +27,7 @@ export default function FormDivida({ divida, onClose }) {
     if (result.status == 200) {
       var dados = await result.json();
       var cliente = dados;
-      console.log(cliente);
+
     } else {
       setErrorMessage("Este Código de Cliente é Invalido ou Não Existe");
     }

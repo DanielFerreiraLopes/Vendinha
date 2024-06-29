@@ -19,8 +19,6 @@ export default function PageCliente() {
 
   var [divida, setDivida] = useState();
 
-  console.log(codigo);
-
   useEffect(() => {
     getByCodigo(codigo)
       .then((d) => d.json())
